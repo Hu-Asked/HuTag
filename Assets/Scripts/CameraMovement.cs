@@ -15,8 +15,6 @@ public class CameraMovement : MonoBehaviour
     }
     void LateUpdate()
     {
-        float posX = 0.0f;
-        float posY = 0.0f;
         int num = 0;
         Vector2 avgPos = Vector2.zero;
         for(int i = 0; i < players.Length; i++)

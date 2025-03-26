@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 7142706771435414169}
   - component: {fileID: 8166993543631835802}
   - component: {fileID: 7492063753848993158}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: PlayerObject
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -214,5 +214,5 @@ MonoBehaviour:
   gravityScale: 1.75
   isGrounded: 0
   isIt: 0
-  invulnerabilityTime: 3
+  invulnerabilityTime: 2
   playerNum: 0

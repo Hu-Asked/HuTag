@@ -4,6 +4,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public float xVelocity = 10.0f;
     public float yVelocity = 9.0f;
+    public float itSpeedMultiplier = 1.25f;
     public float fallMultiplier = 2.5f;
     public float rayCastLength = 0.85f;
     public float gravityScale = 1.5f;
@@ -48,7 +49,11 @@ public class PlayerMovement : MonoBehaviour
         float moveInput = Input.GetAxisRaw(axis);
         
         isGrounded = Physics2D.Raycast(transform.position, Vector2.down, rayCastLength, LayerMask.GetMask("Ground"));
-        rb.linearVelocity = new Vector2(moveInput * xVelocity, rb.linearVelocityY);
+        if (!isIt) {
+            rb.linearVelocity = new Vector2(moveInput * xVelocity, rb.linearVelocityY);
+        } else {
+            rb.linearVelocity = new Vector2(moveInput * xVelocity * itSpeedMultiplier, rb.linearVelocityY);
+        }
         if (isGrounded && Input.GetKey(Up)) { 
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, yVelocity);
             doubleJump = false;
