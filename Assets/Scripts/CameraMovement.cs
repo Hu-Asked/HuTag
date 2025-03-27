@@ -7,6 +7,8 @@ public class CameraMovement : MonoBehaviour
     public Transform[] players;
     public float minSize = 5.0f;
     public float padding = 2.0f;
+    public float minYMultiplier = 0.5f;
+    public float maxYMultiplier = 1.5f;
     public float zoomSpeed = 5.0f;
     private Camera cam;
     void Start()
@@ -19,7 +21,7 @@ public class CameraMovement : MonoBehaviour
         Vector2 avgPos = Vector2.zero;
         for(int i = 0; i < players.Length; i++)
         {
-            if(players[i] != null)
+            if(players[i] != null && players[i].gameObject.activeSelf)
             {
                 avgPos += (Vector2)players[i].position;
                 num++;
@@ -27,14 +29,14 @@ public class CameraMovement : MonoBehaviour
         }
         if(num == 0) return;
         avgPos /= num;
-        float minX = Mathf.Infinity;
-        float maxX = -Mathf.Infinity;
-        float minY = Mathf.Infinity;
-        float maxY = -Mathf.Infinity;
+        float minX = float.MaxValue;
+        float maxX = float.MinValue;
+        float minY = float.MaxValue;
+        float maxY = float.MinValue;
 
         for(int i = 0; i < players.Length; i++)
         {
-            if(players[i] != null)
+            if(players[i].gameObject.activeSelf)
             {
                 minX = Mathf.Min(minX, players[i].position.x);
                 maxX = Mathf.Max(maxX, players[i].position.x);
@@ -49,8 +51,7 @@ public class CameraMovement : MonoBehaviour
         float targetSize = Mathf.Max(sizeY, sizeX / aspectRatio);
         targetSize = Mathf.Max(targetSize, minSize);
         
-        // Smoothly adjust position and size
-        Vector3 targetPosition = new Vector3(avgPos.x, avgPos.y, transform.position.z);
+        Vector3 targetPosition = new(avgPos.x, Mathf.Clamp(avgPos.y, targetSize * minYMultiplier, targetSize*maxYMultiplier), transform.position.z);
         transform.position = Vector3.Lerp(transform.position, targetPosition, zoomSpeed * Time.deltaTime);
         cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, targetSize, zoomSpeed * Time.deltaTime);
     }
