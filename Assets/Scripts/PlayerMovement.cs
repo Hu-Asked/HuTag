@@ -105,14 +105,14 @@ public class PlayerMovement : MonoBehaviour
         }
         if (permeableCheck.collider != null && permeableCheck.transform.gameObject.CompareTag("Permeable"))
         {
-            if (permeableCheck.transform.position.y + 1.1f > transform.position.y)
+            if (!Physics2D.GetIgnoreCollision(GetComponent<Collider2D>(), permeableCheck.collider) && permeableCheck.transform.position.y + 1.1f > transform.position.y)
             {
                 Physics2D.IgnoreCollision(GetComponent<Collider2D>(), permeableCheck.collider, true);
             }
         }
         if (isGrounded.collider != null && isGrounded.transform.gameObject.CompareTag("Permeable"))
         {
-            if (!isCollisionIgnored && isGrounded.transform.position.y < transform.position.y)
+            if (Physics2D.GetIgnoreCollision(GetComponent<Collider2D>(), isGrounded.collider) && !isCollisionIgnored && isGrounded.transform.position.y < transform.position.y)
             {
                 Physics2D.IgnoreCollision(GetComponent<Collider2D>(), isGrounded.collider, false);
             }
@@ -142,8 +142,7 @@ public class PlayerMovement : MonoBehaviour
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), platformCollider, true);
         isCollisionIgnored = true;
         yield return new WaitForSeconds(0.5f);
-        isCollisionIgnored = false;;
-        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), platformCollider, false);
+        isCollisionIgnored = false;
     }
 
     void OnCollisionEnter2D(Collision2D collision)

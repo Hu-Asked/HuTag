@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Jump
+  - Speed
+  - Slow
+  - Permeable
   layers:
   - Default
   - TransparentFX
@@ -11,11 +15,11 @@ TagManager:
   - Ground
   - Water
   - UI
-  - Speed
-  - Jump
-  - Slow
+  - 
+  - 
+  - 
   - Player
-  - Permeable
+  - 
   - 
   - 
   - 
