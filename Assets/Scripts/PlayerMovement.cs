@@ -103,6 +103,9 @@ public class PlayerMovement : MonoBehaviour
             doubleJump = false;
             wallJump = false;
         }
+        if(rb.linearVelocityY > 0 && rb.linearVelocityY < 3f) {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocityY - 1f);
+        }
         if (permeableCheck.collider != null && permeableCheck.transform.gameObject.CompareTag("Permeable"))
         {
             if (!Physics2D.GetIgnoreCollision(GetComponent<Collider2D>(), permeableCheck.collider) && permeableCheck.transform.position.y + 1.1f > transform.position.y)

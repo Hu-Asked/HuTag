@@ -27,7 +27,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7961189857834274395}
   m_Father: {fileID: 0}
@@ -148,7 +148,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &8166993543631835802
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -213,9 +213,9 @@ MonoBehaviour:
   PlayerSpeed: 10
   JumpForce: 14
   itSpeedMultiplier: 1.25
-  fallMultiplier: 2
+  fallMultiplier: 3
   rayCastLength: 1
-  gravityScale: 1.75
+  gravityScale: 2
   isIt: 0
   invulnerabilityTime: 2
   playerNum: 0
