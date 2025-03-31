@@ -64,8 +64,10 @@ public class PlayerMovement : MonoBehaviour
         float moveInput = Input.GetAxisRaw(axis);
         isGrounded = Physics2D.Raycast(transform.position, Vector2.down, rayCastLength, LayerMask.GetMask("Ground"));
         permeableCheck = Physics2D.BoxCast(transform.position, transform.localScale, 0f, Vector2.up, rayCastLength * 2f, LayerMask.GetMask("Ground"));
-        wallLeft = Physics2D.Raycast(transform.position, Vector2.left, rayCastLength, LayerMask.GetMask("Ground"));
-        wallRight = Physics2D.Raycast(transform.position, Vector2.right, rayCastLength, LayerMask.GetMask("Ground"));
+        Vector2 boxSize = new Vector2(0.1f, transform.localScale.y * 0.9f);
+        
+        wallLeft = Physics2D.BoxCast(transform.position, boxSize, 0f, Vector2.left, rayCastLength, LayerMask.GetMask("Ground"));
+        wallRight = Physics2D.BoxCast(transform.position, boxSize, 0f, Vector2.right, rayCastLength, LayerMask.GetMask("Ground"));
         if (isGrounded.collider != null)
         {
             if (isGrounded.transform.gameObject.CompareTag("Slow"))
