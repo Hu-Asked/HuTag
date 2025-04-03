@@ -3,6 +3,7 @@ using Unity.Collections;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using NUnit.Framework;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     public float rayCastLength = 0.85f;
     public float gravityScale = 1.5f;
     public bool isIt = false;
+    public GameObject tagParticles;
     public static float timeSinceTagged = 0.0f;
     public float invulnerabilityTime = 3.0f;
     public int playerNum = 0;
@@ -25,8 +27,8 @@ public class PlayerMovement : MonoBehaviour
     public bool doubleJump = false;
     private RaycastHit2D isGrounded;
     private RaycastHit2D permeableCheck;
-    public bool wallLeft = false;
-    public bool wallRight = false;
+    private RaycastHit2D wallLeft;
+    private RaycastHit2D wallRight;
     public bool wallJump = false;
     private bool isCollisionIgnored = false;
 
@@ -62,9 +64,9 @@ public class PlayerMovement : MonoBehaviour
         float xVelocity = PlayerSpeed;
         float yVelocity = JumpForce;
         float moveInput = Input.GetAxisRaw(axis);
-        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, rayCastLength, LayerMask.GetMask("Ground"));
+        isGrounded = Physics2D.BoxCast(transform.position, transform.localScale, 0f, Vector2.down, rayCastLength, LayerMask.GetMask("Ground"));
         permeableCheck = Physics2D.BoxCast(transform.position, transform.localScale, 0f, Vector2.up, rayCastLength * 2f, LayerMask.GetMask("Ground"));
-        Vector2 boxSize = new Vector2(0.1f, transform.localScale.y * 0.9f);
+        Vector2 boxSize = new(0.1f, transform.localScale.y * 0.9f);
         
         wallLeft = Physics2D.BoxCast(transform.position, boxSize, 0f, Vector2.left, rayCastLength, LayerMask.GetMask("Ground"));
         wallRight = Physics2D.BoxCast(transform.position, boxSize, 0f, Vector2.right, rayCastLength, LayerMask.GetMask("Ground"));
@@ -110,9 +112,23 @@ public class PlayerMovement : MonoBehaviour
         }
         if (permeableCheck.collider != null && permeableCheck.transform.gameObject.CompareTag("Permeable"))
         {
-            if (!Physics2D.GetIgnoreCollision(GetComponent<Collider2D>(), permeableCheck.collider) && permeableCheck.transform.position.y + 1.1f > transform.position.y)
+            if (!Physics2D.GetIgnoreCollision(GetComponent<Collider2D>(), permeableCheck.collider) && permeableCheck.transform.position.y + 1.5f > transform.position.y)
             {
                 Physics2D.IgnoreCollision(GetComponent<Collider2D>(), permeableCheck.collider, true);
+            }
+        } 
+        else if (wallLeft.collider != null && wallLeft.transform.gameObject.CompareTag("Permeable"))
+        {
+            if (!isCollisionIgnored)
+            {
+                StartCoroutine(DisableCollisionTemporarily(wallLeft.collider));
+            }
+        } 
+        else if (wallRight.collider != null && wallRight.transform.gameObject.CompareTag("Permeable"))
+        {
+            if (!isCollisionIgnored)
+            {
+                StartCoroutine(DisableCollisionTemporarily(wallRight.collider));
             }
         }
         if (isGrounded.collider != null && isGrounded.transform.gameObject.CompareTag("Permeable"))
@@ -146,15 +162,17 @@ public class PlayerMovement : MonoBehaviour
     {
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), platformCollider, true);
         isCollisionIgnored = true;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.7f);
         isCollisionIgnored = false;
     }
-
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionStay2D(Collision2D collision)
     {
         GameObject obj = collision.gameObject;
         if (obj.CompareTag("Player") && isIt && Time.time - timeSinceTagged >= invulnerabilityTime)
         {
+            tagParticles.GetComponent<TagEffect>().p1 = transform;
+            tagParticles.GetComponent<TagEffect>().p2 = obj.transform;
+            tagParticles.GetComponent<TagEffect>().executeTagEffect = true;
             obj.GetComponent<PlayerMovement>().isIt = true;
             isIt = false;
             timeSinceTagged = Time.time;

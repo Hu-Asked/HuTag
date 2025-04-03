@@ -9,7 +9,6 @@ public class ItMarker : MonoBehaviour
     {
         for(int i = 0; i < players.Length; i++) {
             if(players[i].GetComponent<PlayerMovement>().isIt) {
-                yOffset = 1 + (players[i].transform.localScale.x - 1) / 2;
                 transform.position = players[i].transform.position + new Vector3(0, yOffset, 0);
                 transform.localScale = new Vector3(players[i].transform.localScale.x, -Math.Abs(players[i].transform.localScale.y / 4), players[i].transform.localScale.z);
                 break;
