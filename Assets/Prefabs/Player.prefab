@@ -207,15 +207,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 547d3ad26bfaf8849ae93576ad4e8a0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedMultiplier: 2
+  speedMultiplier: 1.35
   slowMuliplier: 0.75
   jumpMuliplier: 2
-  PlayerSpeed: 10
-  JumpForce: 14
+  PlayerSpeed: 19
+  JumpForce: 19
   itSpeedMultiplier: 1.25
-  fallMultiplier: 3
+  fallMultiplier: 3.3
   rayCastLength: 1
-  gravityScale: 2
+  gravityScale: 2.4
   isIt: 0
   tagParticles: {fileID: 0}
   invulnerabilityTime: 2

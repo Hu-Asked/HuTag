@@ -21,14 +21,15 @@ public class PlayerMovement : MonoBehaviour
     public static float timeSinceTagged = 0.0f;
     public float invulnerabilityTime = 3.0f;
     public int playerNum = 0;
+    public float wallDetectOffset = 0.02f;
     private string axis;
     private KeyCode Up;
     private KeyCode Down;
     public bool doubleJump = false;
     private RaycastHit2D isGrounded;
     private RaycastHit2D permeableCheck;
-    private RaycastHit2D wallLeft;
-    private RaycastHit2D wallRight;
+    public bool wallLeft;
+    public bool wallRight;
     public bool wallJump = false;
     private bool isCollisionIgnored = false;
 
@@ -65,11 +66,13 @@ public class PlayerMovement : MonoBehaviour
         float yVelocity = JumpForce;
         float moveInput = Input.GetAxisRaw(axis);
         isGrounded = Physics2D.BoxCast(transform.position, transform.localScale, 0f, Vector2.down, rayCastLength, LayerMask.GetMask("Ground"));
-        permeableCheck = Physics2D.BoxCast(transform.position, transform.localScale, 0f, Vector2.up, rayCastLength * 2f, LayerMask.GetMask("Ground"));
-        Vector2 boxSize = new(0.1f, transform.localScale.y * 0.9f);
+        permeableCheck = Physics2D.BoxCast(transform.position, transform.localScale, 0f, Vector2.up, rayCastLength * 2f, LayerMask.GetMask("Ground"));        
+        Vector2 wallCheckSize = new(0.1f, transform.localScale.y * 0.8f);
+        Vector2 leftOrigin = (Vector2)transform.position - new Vector2((transform.localScale.x / 2f) - wallDetectOffset, 0);
+        Vector2 rightOrigin = (Vector2)transform.position + new Vector2((transform.localScale.x / 2f) - wallDetectOffset, 0);
         
-        wallLeft = Physics2D.BoxCast(transform.position, boxSize, 0f, Vector2.left, rayCastLength, LayerMask.GetMask("Ground"));
-        wallRight = Physics2D.BoxCast(transform.position, boxSize, 0f, Vector2.right, rayCastLength, LayerMask.GetMask("Ground"));
+        wallLeft = Physics2D.BoxCast(leftOrigin, wallCheckSize, 0f, Vector2.left, rayCastLength, LayerMask.GetMask("Ground"));
+        wallRight = Physics2D.BoxCast(rightOrigin, wallCheckSize, 0f, Vector2.right, rayCastLength, LayerMask.GetMask("Ground"));
         if (isGrounded.collider != null)
         {
             if (isGrounded.transform.gameObject.CompareTag("Slow"))
@@ -97,6 +100,10 @@ public class PlayerMovement : MonoBehaviour
                 rb.linearVelocity = new Vector2(moveInput * xVelocity * itSpeedMultiplier, rb.linearVelocityY);
             }
         }
+        if (isGrounded) {
+            doubleJump = false;
+            wallJump = false;
+        }
         if (isGrounded && Input.GetKey(Up))
         {
             if (isGrounded.collider != null && isGrounded.transform.gameObject.CompareTag("Jump"))
@@ -104,8 +111,6 @@ public class PlayerMovement : MonoBehaviour
                 yVelocity *= jumpMuliplier;
             }
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, yVelocity);
-            doubleJump = false;
-            wallJump = false;
         }
         if(rb.linearVelocityY > 0 && rb.linearVelocityY < 3f) {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocityY - 1f);
@@ -117,20 +122,20 @@ public class PlayerMovement : MonoBehaviour
                 Physics2D.IgnoreCollision(GetComponent<Collider2D>(), permeableCheck.collider, true);
             }
         } 
-        else if (wallLeft.collider != null && wallLeft.transform.gameObject.CompareTag("Permeable"))
-        {
-            if (!isCollisionIgnored)
-            {
-                StartCoroutine(DisableCollisionTemporarily(wallLeft.collider));
-            }
-        } 
-        else if (wallRight.collider != null && wallRight.transform.gameObject.CompareTag("Permeable"))
-        {
-            if (!isCollisionIgnored)
-            {
-                StartCoroutine(DisableCollisionTemporarily(wallRight.collider));
-            }
-        }
+        // else if (wallLeft.collider != null && wallLeft.transform.gameObject.CompareTag("Permeable"))
+        // {
+        //     if (!isCollisionIgnored)
+        //     {
+        //         StartCoroutine(DisableCollisionTemporarily(wallLeft.collider));
+        //     }
+        // } 
+        // else if (wallRight.collider != null && wallRight.transform.gameObject.CompareTag("Permeable"))
+        // {
+        //     if (!isCollisionIgnored)
+        //     {
+        //         StartCoroutine(DisableCollisionTemporarily(wallRight.collider));
+        //     }
+        // }
         if (isGrounded.collider != null && isGrounded.transform.gameObject.CompareTag("Permeable"))
         {
             if (Physics2D.GetIgnoreCollision(GetComponent<Collider2D>(), isGrounded.collider) && !isCollisionIgnored && isGrounded.transform.position.y < transform.position.y)
