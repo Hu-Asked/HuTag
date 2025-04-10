@@ -34,7 +34,10 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0;
             string nameOfIt = "";
             for (int i = 0; i < numPlayers; i++) {
-                if (players[i].GetComponent<PlayerMovement>().isIt) nameOfIt = playerNames[i]; break;
+                if (players[i].GetComponent<PlayerMovement>().isIt) {
+                    nameOfIt = playerNames[i]; 
+                    break;
+                }
             }
             itPlayerText.text = nameOfIt + " eats dog";
             itPlayerText.gameObject.SetActive(true);
