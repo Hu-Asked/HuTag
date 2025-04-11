@@ -52,10 +52,15 @@ public class PlayerMovement : MonoBehaviour
                 Down = KeyCode.DownArrow;
                 break;
             case 2:
-                axis = "IJKL Horizontal";
-                Up = KeyCode.I;
-                Down = KeyCode.K;
+                axis = "YGHJ Horizontal";
+                Up = KeyCode.Y;
+                Down = KeyCode.H;
                 break;
+            case 3:
+                axis = "PL Horizontal";
+                Up = KeyCode.P;
+                Down = KeyCode.Semicolon;
+                break;                
         }
     }
 

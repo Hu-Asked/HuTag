@@ -292,16 +292,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 679ddd868eb13314aa1297eda22cd956, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numPlayers: 3
+  numPlayers: 4
   players:
   - {fileID: 515882329}
   - {fileID: 1009363864}
   - {fileID: 30366252}
   - {fileID: 2043733655}
-  totalTime: 90
+  totalTime: 10
   timerText: {fileID: 320511341}
-  itPlayerText: {fileID: 0}
-  playerNames: []
+  itPlayerText: {fileID: 323601413}
+  playerNames:
+  - Yan
+  - Bomber
+  - Jiusu
+  - Yifeng Xu edel
 --- !u!4 &79348208
 Transform:
   m_ObjectHideFlags: 0
@@ -6643,6 +6647,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4793695972797128787, guid: 6edfe5e592bae054e9aacc646e084496, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -3929056733362971709, guid: aaa9a30b1c5e10646adc8f88a9b065e1, type: 3}
     - target: {fileID: 6235715783493830096, guid: 6edfe5e592bae054e9aacc646e084496, type: 3}
       propertyPath: m_Layer
       value: 9
